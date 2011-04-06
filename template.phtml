@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Where am I?</title>
+    <style>
+      html, body, h1, h2, ul, li, p { margin: 0; padding: 0; background: #94B0BE; color: #FFF; list-style: none; line-height: 24px; }
+      body { margin: 36px; background: transparent; font-family: Georgia; }
+
+      h1, h2 { text-transform: uppercase; letter-spacing: 2px; font-family: Futura; }
+      h1, h2, li { margin-bottom: 12px; }
+      h1, h2, ul { margin-bottom: 36px; }
+
+      #summary li { font-size: 20px; }
+
+      h2 { font-style: italic; }
+
+      .how { color: #D0E4F4; }
+      .how a { color: inherit; }
+      .how:after { content: " \2708"; }
+    </style>
+  </head>
+  <body>
+    <h1>Where am I?</h1>
+      
+    <ul id="summary">
+      <? if ($locations['current']): ?>
+        <li class="current">Today I am in <?= $locations['current']['place'] ?>.</li>
+      <? endif; ?>
+      <? if ($locations['last']):
+         # Using the current date is intentional here.
+         # I want to say when I left, not when I arrived.
+      ?>
+        <li class="previous"><?= ucfirst(relative_date($locations['current']['date'])) ?> I was in <?= $locations['last']['place'] ?>.</li>
+      <? endif; ?>
+      <? if ($locations['next']): ?>
+        <li class="next"><?= ucfirst(relative_date($locations['next']['date'])) ?> I will be in in <?= $locations['next']['place'] ?>.</li>
+      <? endif; ?>
+    </ul>
+    
+    <? foreach(array('future' => 'Soon', 'past' => 'Previously') as $key => $title): ?>
+      <h2><?= $title ?></h2>
+    
+      <ul>
+        <? foreach ($locations[$key] as $location): ?>
+          <li><strong><?= ucfirst(date('F j', $location['date'])) ?></strong>: <?= $location['place'] ?></li>
+        <? endforeach; ?>
+      </ul>
+    <? endforeach; ?>
+    
+    <p class="how">Powered by <a href="http://github.com/johnholdun/jetset">jetset.php</a></p>
+  </body>
+</html>
